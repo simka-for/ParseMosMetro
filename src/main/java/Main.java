@@ -10,10 +10,10 @@ import java.util.*;
 
 public class Main {
 
-    private static Map<String, Object> metro = new HashMap<>();                 // Общая коллекция
-    private static Map<String, List<String>> stations = new HashMap<>();        // Коллекция станций
-    private static Set<String> lineNumbers = new HashSet<>();                   // Коллекция номеров линий
-    private static Set<Line> lineSet = new HashSet<>();                         // Коллекция линий
+    public static Map<String, Object> metro = new HashMap<>();                 // Общая коллекция
+    public static Map<String, List<String>> stations = new HashMap<>();        // Коллекция станций
+    public static Set<String> lineNumbers = new HashSet<>();                   // Коллекция номеров линий
+    public static Set<LineToJson> lineSet = new HashSet<>();                   // Коллекция линий
 
 
     public static void main(String[] args) throws IOException {
@@ -42,10 +42,10 @@ public class Main {
             //парсинг линий
             // ========================================================================================================
             elem.parallelStream().filter(tr -> tr.select("td:nth-child(1) span:nth-child(1)")
-                    .text().equals(line)).findFirst().ifPresent(x -> lineSet.add(new Line(
+                    .text().equals(line)).findFirst().ifPresent(t -> lineSet.add(new LineToJson(
                     line,
-                    x.select("td:nth-child(1) span:nth-child(2)").attr("title"),
-                    lineColor(x.select("td:nth-child(1)").attr("style")),
+                    t.select("td:nth-child(1) span:nth-child(2)").attr("title"),
+                    lineColor(t.select("td:nth-child(1)").attr("style")),
                     stationList.size())));
         });
 
@@ -60,4 +60,5 @@ public class Main {
     private static String lineColor(String tdStyle) {
         return tdStyle.isEmpty() ? "неизвестно" : tdStyle.substring(tdStyle.indexOf("#"));
     }
+
 }
